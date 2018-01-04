@@ -2,7 +2,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_signed.all;
-use work.adder_Package.all;
+USE work.adder_Package.all;
 
 PACKAGE LUT_PACKAGE IS
 
@@ -10,34 +10,34 @@ PACKAGE LUT_PACKAGE IS
 COMPONENT LUT
       PORT (x: IN SIGNED(M+M-1 DOWNTO 0);
             y: OUT SIGNED(M-1 DOWNTO 0));
-end component;
+END component;
 
-end package;
+END package;
 
 -----------------------------------
 ----------NODE---------------------
 -----------------------------------
 
 library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
+USE IEEE.std_logic_1164.all;
+USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_signed.all;
 
-use work.LUT_PACKAGE.all;
-use work.adder_Package.all;
-use work.mac_Package.all;
+USE work.LUT_PACKAGE.all;
+USE work.adder_Package.all;
+USE work.mac_Package.all;
 
-entity LUT is
+ENTITY LUT IS
       PORT (x: IN SIGNED(M+M-1 DOWNTO 0);
       y: OUT SIGNED(M-1 DOWNTO 0));
-end LUT;
+END LUT;
 
-architecture NN of LUT is
+ARCHITECTURE NN of LUT IS
 
     SIGNAL s_x : STD_LOGIC_VECTOR(M-1 DOWNTO 0);
     SIGNAL s_y : STD_LOGIC_VECTOR(M-1 DOWNTO 0);
 
-begin
+BEGIN
 
     PROCESS(x)
     VARIABLE v_x: SIGNED(M-1 DOWNTO 0) := (others => '0');
@@ -70,4 +70,4 @@ begin
     
     y <= signed(s_y);
    
-end NN;
+END NN;
