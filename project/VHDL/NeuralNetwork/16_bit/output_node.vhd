@@ -2,7 +2,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_signed.all;
-use work.adder_Package.all;
+USE work.adder_Package.all;
 
 PACKAGE OUTPUT_NODE_PACKAGE IS
 
@@ -10,31 +10,32 @@ COMPONENT OUTPUT_NODE
       PORT (x: IN INPUTARRAY;
             clk, rst: IN STD_LOGIC;
             y: OUT INPUTARRAY);
-end component;
+END component;
 
-end package;
+END package;
 
 -----------------------------------
 ----------NODE---------------------
 -----------------------------------
 
 library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
+USE IEEE.std_logic_1164.all;
+USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_signed.all;
-use work.NODE_Package.all;
-use work.MAC_Package.all;
-use work.adder_package.all;
-use work.LUT_package.all;
-use work.OUTPUT_NODE_PACKAGE.all;
 
-entity OUTPUT_NODE is
+USE work.NODE_Package.all;
+USE work.MAC_Package.all;
+USE work.adder_package.all;
+USE work.LUT_package.all;
+USE work.OUTPUT_NODE_PACKAGE.all;
+
+ENTITY OUTPUT_NODE IS
       PORT (x: IN INPUTARRAY;
       clk, rst: IN STD_LOGIC;
       y: OUT INPUTARRAY);
-end OUTPUT_NODE;
+END OUTPUT_NODE;
 
-architecture NN of OUTPUT_NODE is
+ARCHITECTURE NN of OUTPUT_NODE IS
 
 --SIGNAL output_index : INTEGER;
 SIGNAL sum : INPUTARRAY;
@@ -59,4 +60,4 @@ y <= sum;
 --        end loop;
 --    END PROCESS;
 
-end NN;
+END NN;
