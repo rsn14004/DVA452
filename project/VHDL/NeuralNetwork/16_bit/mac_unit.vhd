@@ -1,26 +1,26 @@
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_arith.all;
-use ieee.std_logic_signed.all;
-use work.adder_package.all;
-use work.MAC_Package.all;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.std_logic_arith.all;
+USE ieee.std_logic_signed.all;
+USE work.adder_package.all;
+USE work.MAC_Package.all;
 
-entity MAC_Unit is
+ENTITY MAC_Unit IS
     GENERIC (size : INTEGER := c_size);
     PORT( xIn, weightIN: IN SIGNED (size-1 DOWNTO 0);
           acc: IN SIGNED(size+size-1 DOWNTO 0);
           clk, rst: IN STD_LOGIC := '0';
           weightOUT: OUT SIGNED (size-1 DOWNTO 0) := (others => '0');
           sum: OUT SIGNED (size+size-1 DOWNTO 0));
-end MAC_Unit;
+END MAC_Unit;
 
-architecture Behavioral of MAC_Unit is
+ARCHITECTURE Behavioral of MAC_Unit IS
     SIGNAL prod: SIGNED (size+size-1 DOWNTO 0);
     SIGNAL prodSum: SIGNED (size+size-1 DOWNTO 0);
     SIGNAL xInU : SIGNED(size-1 DOWNTO 0);   -- SIGNAL for convert negative number to positive
     SIGNAL weightU : SIGNED (size-1 DOWNTO 0);   -- SIGNAL for convert negative number to positive
     
-begin
+BEGIN
 
     muli : multiplier port map (a => xInU,
                                     b => weightU,
