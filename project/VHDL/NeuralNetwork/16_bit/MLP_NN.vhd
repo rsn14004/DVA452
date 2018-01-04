@@ -1,10 +1,10 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_arith.all;
+
 use ieee.std_logic_unsigned.all;
 use work.NODE_Package.all;
 use work.MAC_Package.all;
---use work.NET_Package.all;
 use work.ONE_LAYER_PACKAGE.all;
 use work.FIRST_LAYER_PACKAGE.all;
 use work.ADDER_PACKAGE.ALL;
@@ -19,12 +19,12 @@ end MLP_NN;
 
 architecture NN of MLP_NN is
 
-    signal sum : INPUTMATRIX;        -- Holds the sum outputs for each Layer
-    signal pixel_inputs : FIRSTINPUTARRAY;        -- Holds the acc input for each Layer
-    signal acc : INPUTMATRIX;        -- Holds the acc input for each Layer
-    signal output_value : INPUTARRAY;
-    signal weightsIn : WEIGHTINPUTMATRIX;
-    signal weightsOut : WEIGHTINPUTMATRIX;
+    SIGNAL sum : INPUTMATRIX;        -- Holds the sum outputs for each Layer
+    SIGNAL pixel_inputs : FIRSTINPUTARRAY;        -- Holds the acc input for each Layer
+    SIGNAL acc : INPUTMATRIX;        -- Holds the acc input for each Layer
+    SIGNAL output_value : INPUTARRAY;
+    SIGNAL weightsIn : WEIGHTINPUTMATRIX;
+    SIGNAL weightsOut : WEIGHTINPUTMATRIX;
     
     SIGNAL addra_weights : STD_LOGIC_VECTOR(3 DOWNTO 0) := (others => '0');
     SIGNAL douta_weights : STD_LOGIC_VECTOR(M-1 DOWNTO 0);
@@ -48,7 +48,7 @@ COMPONENT blk_mem_gen_1
       );
     END COMPONENT;
     
-    COMPONENT blk_mem_gen_2
+ COMPONENT blk_mem_gen_2
       PORT (
         clka : IN STD_LOGIC;
         ena : IN STD_LOGIC;
@@ -78,7 +78,7 @@ begin
                                 clk => clk,
                                 rst => rst,
                                 y => sum(i));
-    end generate;
+    END generate;
     
         output_unit : OUTPUT_NODE port map(
                                 x => sum(L-1),
@@ -86,7 +86,7 @@ begin
                                 rst => rst,
                                 y => output_value);
                                 
-     weight_memory : blk_mem_gen_1
+     weight_memory : BLK_MEM_GEN_1
                                   PORT MAP (
                                     clka => clk,
                                     ena => ena_weights,
@@ -94,7 +94,7 @@ begin
                                     douta => douta_weights
                                   );
                                   
-     input_memory : blk_mem_gen_2
+     input_memory : BLK_MEM_GEN_2
                                     PORT MAP (
                                       clka => clk,
                                       ena => ena_inputs,
@@ -114,7 +114,7 @@ begin
     q_loop : for i in 1 to L-1 generate
              acc(i) <= sum(i-1);
              weightsIN(i) <= weightsOUT(i-1);
-    end generate;
+    END generate;
     
     PROCESS(input_counter)
     VARIABLE temp_input: SIGNED(M-1 DOWNTO 0);
@@ -144,4 +144,4 @@ begin
     END IF;
     END PROCESS;
     
-end NN;
+END NN;
