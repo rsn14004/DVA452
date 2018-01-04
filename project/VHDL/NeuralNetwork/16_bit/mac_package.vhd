@@ -1,11 +1,11 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
-use ieee.std_logic_signed.all;
-use work.adder_package.all;
+USE IEEE.std_logic_arith.all;
+USE ieee.std_logic_signed.all;
+USE work.adder_package.all;
 
 PACKAGE MAC_Package IS
-COMPONENT MAC_Unit is
+COMPONENT MAC_Unit IS
     GENERIC (size : INTEGER := c_size);
     PORT( xIn, weightIN: IN SIGNED (size-1 DOWNTO 0);
           acc: IN SIGNED(size+size-1 DOWNTO 0);
@@ -25,18 +25,18 @@ FUNCTION truncate (SIGNAL a, b: SIGNED; size: integer) RETURN SIGNED IS
 VARIABLE result: SIGNED(size downto 0);
     BEGIN   
         result := a + b;
-        if(a(a'high) = b(b'high)) then
-            if(result(result'high) /= a(a'high)) then
-                if(a(a'high) = '0') then
+        IF(a(a'high) = b(b'high)) THEN
+            IF(result(result'high) /= a(a'high)) THEN
+                IF(a(a'high) = '0') THEN
                     result := (result'high => '0', others => '1');
                    -- result := "01111111";
-                else
+                ELSE
                     result := (result'high => '1', others => '0');
                     --result := "10000000";
-                end if;
-            end if;
-        end if;       
-    return result;
+                END if;
+            END if;
+        END if;       
+    RETURN result;
 END function truncate;
 FUNCTION convPosToNeg(SIGNAL a: SIGNED; size: integer)RETURN SIGNED IS
  VARIABLE result: SIGNED(size downto 0);
@@ -44,24 +44,24 @@ FUNCTION convPosToNeg(SIGNAL a: SIGNED; size: integer)RETURN SIGNED IS
  BEGIN
      b := UNSIGNED(a);
      b := b-1;
-     for i in 0 to b'high loop
-         if(b(i) = '1') then
+     FOR i in 0 to b'high loop
+         IF(b(i) = '1') THEN
              result(i) := '0';
-         else
+         ELSE
              result(i):= '1';
-         end if;
-     end loop;
-     return  result;
+         END if;
+     END loop;
+     RETURN  result;
  END FUNCTION convPosToNeg; 
  FUNCTION truncateSingle (SIGNAL a: SIGNED; size: integer) RETURN SIGNED IS
  VARIABLE result: SIGNED(size downto 0);
      BEGIN   
          result := a;
-         if(a(a'high) = '1') then
+         IF(a(a'high) = '1') THEN
             result := "1000";
-         else
+         ELSE
             result := "0111";
-         end if;       
-     return result;
+         END if;       
+     RETURN result;
  END function truncateSingle;
-end package body MAC_Package;
+END package body MAC_Package;
