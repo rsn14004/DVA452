@@ -5,7 +5,7 @@ use ieee.std_logic_signed.all;
 
 package adder_package is
 
-constant c_size : INTEGER := 16;
+CONSTANT c_size : INTEGER := 16;
 CONSTANT N : INTEGER := 2; -- n= # of MAC's (Inputs in each node).,
 CONSTANT M : INTEGER := 16; -- m= # of bits of input and coef.
 CONSTANT K : INTEGER := 2; -- k= # of Nodes / Layer.,
@@ -18,30 +18,30 @@ TYPE INPUTMATRIXARRAY IS ARRAY (L-1 DOWNTO 0) OF INPUTMATRIX;
 TYPE WEIGHTINPUTARRAY IS ARRAY (K-1 DOWNTO 0) OF SIGNED(M-1 DOWNTO 0);
 TYPE WEIGHTINPUTMATRIX IS ARRAY (L-1 DOWNTO 0) OF SIGNED(M-1 DOWNTO 0);
     
-component full_adder is
+COMPONENT full_adder is
     Port ( A : 	in STD_LOGIC; 		-- First input
            B : 	in STD_LOGIC; 		-- Second input
            CIN :in STD_LOGIC; 		-- Carry in
            COUT : out STD_LOGIC; 	-- Carry out
            S : out STD_LOGIC); 		-- Adder out
-end component; 
+END COMPONENT; 
 
-component AdderBlock IS
+COMPONENT AdderBlock IS
     PORT ( adderA : in STD_LOGIC;   -- first input for the full adder
            adderB : in STD_LOGIC;   -- second imput for the full adder
            andA : in STD_LOGIC;     -- first input for the and gate
            andB : in STD_LOGIC;     -- second imput for the and gate
            sum : out STD_LOGIC;     -- the sum output
            carry : out STD_LOGIC);  -- the carry output
-end component;
+END COMPONENT;
 
-component multiplier IS
+COMPONENT multiplier IS
     generic(N : INTEGER := c_size);                             -- Sets the multiplier to 16 bit default
     PORT( a ,b : in SIGNED;       
 		  p : out SIGNED); 
-end component multiplier;
+END COMPONENT multiplier;
 
-end package adder_package;
+END package adder_package;
 
 ----------------------------------------------
 -------------- 2-bit full-adder --------------
@@ -50,21 +50,21 @@ end package adder_package;
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity full_adder is
+ENTITY full_adder IS
     Port ( A : 	in STD_LOGIC; 		-- First input
            B : 	in STD_LOGIC; 		-- Second input
            CIN :in STD_LOGIC; 		-- Carry in
            COUT : out STD_LOGIC; 	-- Carry out
            S : out STD_LOGIC); 		-- Adder out
-end full_adder;
+END full_adder;
 
 
-architecture dataflow of full_adder is
+ARCHITECTURE dataflow of full_adder IS
 
 	-- intermediate signal declaration
 	signal q1, q2, q3 : STD_LOGIC;
 
-begin
+BEGIN
 	
 	-- internal signals
 	q1 <= A xor B;
@@ -75,7 +75,7 @@ begin
 	S <= q1 xor CIN;
 	COUT <= q2 or q3;
 
-end architecture ; -- dataflow
+END ARCHITECTURE; -- dataflow
 
 --------------------------------------------
 ----------------- AdderBlock ---------------
@@ -105,12 +105,12 @@ ARCHITECTURE adderBlockDataFlow of AdderBlock IS
     
     signal q1 : STD_LOGIC;
 
-begin
+BEGIN
     q1 <= andA AND andB;
     
     G1 : full_adder PORT MAP(adderA, adderB, q1, carry, sum);
 
-end adderBlockDataFlow;
+END adderBlockDataFlow;
 
 ----------------------------------------------
 ----------------- Multiplier -----------------
@@ -121,48 +121,48 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.std_logic_arith.all;
 use ieee.std_logic_signed.all;
 
-entity multiplier is
+ENTITY multiplier IS
     generic(N : INTEGER := 4);                             -- Sets the multiplier to 16 bit default
 	port( a ,b : in SIGNED  (N-1  DOWNTO  0);       
 		  p : out SIGNED  (N+N-1  DOWNTO  0)); 
-end multiplier; 
+END multiplier; 
 
-architecture multiarch of multiplier is
+ARCHITECTURE multiarch of multiplier IS
 	
 	-- just the full adder component
-    component full_adder is
+    COMPONENT full_adder IS
         Port ( A :  in STD_LOGIC;       -- First input
                B :  in STD_LOGIC;       -- Second input
                CIN : in STD_LOGIC;      -- Carry in
                COUT : out STD_LOGIC;    -- Carry out
                S : out STD_LOGIC);      -- Adder out
-    end component;
+    END COMPONENT;
 
     -- block with both AND-gate and full adder
-	component AdderBlock is
+	COMPONENT AdderBlock IS
 	    port ( adderA : in STD_LOGIC;   -- first input for the full adder
 	           adderB : in STD_LOGIC;   -- second imput for the full adder
 	           andA : in STD_LOGIC;     -- first input for the and gate
 	           andB : in STD_LOGIC;     -- second imput for the and gate
 	           sum : out STD_LOGIC;     -- the sum output
 	           carry : out STD_LOGIC);  -- the carry output
-	end component;
+	END COMPONENT;
 
     -- signals for all regular adderblocks defined as matrices
     type matrix is array (0 to N-1) of SIGNED(N-1 downto 0); 
-    signal sumIn : matrix;
-    signal carryIn : matrix;
-    signal sum : matrix;
-    signal carry : matrix;
+    SIGNAL sumIn : matrix;
+    SIGNAL carryIn : matrix;
+    SIGNAL sum : matrix;
+    SIGNAL carry : matrix;
     
     -- input output signals for the bottom adderblocks
-    signal bottomSumIn : SIGNED(0 to N-1);
-    signal bottomSumOut : SIGNED(0 to N-1);
-    signal bottomCarryIn : SIGNED(0 to N-1);
-    signal bottomCarryOut : SIGNED(0 to N-1);
-    signal bottomCarryIn2 : SIGNED(0 to N-1);
+    SIGNAL bottomSumIn : SIGNED(0 to N-1);
+    SIGNAL bottomSumOut : SIGNED(0 to N-1);
+    SIGNAL bottomCarryIn : SIGNED(0 to N-1);
+    SIGNAL bottomCarryOut : SIGNED(0 to N-1);
+    SIGNAL bottomCarryIn2 : SIGNED(0 to N-1);
 
-begin
+BEGIN
 	
 	-- generates all regular adderblocks
     a_loop : for i in 0 to N-1 generate
@@ -173,8 +173,8 @@ begin
                                      andB => b(j),
                                      sum => sum(i)(j),
                                      carry => carry(i)(j));
-        end generate;
-    end generate;
+        END generate;
+    END generate;
     
     -- generates the bottom most adderblocks which are just basicly adders
     final_row_loop : for j in 0 to N-2 generate
@@ -184,12 +184,12 @@ begin
                                         andB => bottomCarryIn2(j),
                                         sum => bottomSumOut(j),
                                         carry => bottomCarryOut(j));
-    end generate;
+    END generate;
     
     -- Initializes all sum ins on the top most adderblocks to 0
     init_sumIn : for j in 0 to N-1 generate
         sumIn(0)(j) <= '0';
-    end generate;
+    END generate;
     
     -- Sets the connection for all sum ins as the upper left adjecent adderblock
     sumIn_a_loop : for i in 1 to N-1 generate
@@ -197,26 +197,26 @@ begin
             sumIn(i)(j) <= sum(i-1)(j+1);
         end generate;
         sumIn(i)(N-1) <= '0'; -- Sets the left most adderblocks sum in to 0
-    end generate;
+    END generate;
     
     -- Sets all carry ins to the upper adjecent adderblock carry out
     carryIn_b_loop : for j in 0 to N-1 generate
         carryIn(0)(j) <= '0';                   -- sets the uppermost adderblcks carry in to 0
         carryIn_a_loop : for i in 1 to N-1 generate
             carryIn(i)(j) <= carry(i-1)(j);
-        end generate;
-    end generate;
+        END generate;
+    END generate;
     
     --  Sets product out to sum out om the coresponding adderblock upp to N-1
     p_a_loop : for i in 0 to N-1 generate
         p(i) <= sum(i)(0);
-    end generate;
+    END generate;
     
     -- sets the second carry in on the bottom adderblocks to the right carry out
     bottomCarryIn2(0) <= '0';                       -- Sets the ritghtmost adderblocks second carry in to 0
     bottom_carryIn2_loop : for j in 1 to N-2 generate
             bottomCarryIn2(j) <= carry(N-1)(j-1);
-    end generate;
+    END generate;
 
     -- Sets the sum in for the bottom adderblocks to the upper left adjecent adderblock sum out
     -- Sets the carry in for bottom adderblocks to the upper adjecent adderblock carry out
@@ -226,7 +226,7 @@ begin
             bottomCarryIn(j) <= carry(N-1)(j);
             
             p(N+j) <= bottomSumOut(j);
-    end generate;
+    END generate;
     p(N+N-1) <= bottomCarryOut(N-2); -- Sets the last product bit to the carry out from the leftmost bottom adderblock
 	
-end architecture; -- multiarch
+END architecture; -- multiarch
