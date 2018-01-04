@@ -2,7 +2,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_signed.all;
-use work.adder_Package.all;
+USE work.adder_Package.all;
 
 PACKAGE NODE_PACKAGE IS
 
@@ -12,46 +12,45 @@ COMPONENT NODE
             weightOut: OUT SIGNED(M-1 DOWNTO 0);
             clk, rst: IN STD_LOGIC;
             y: OUT SIGNED(M-1 DOWNTO 0));
-end component;
-
-end package;
+      END component;
+END package;
 
 -----------------------------------
 ----------NODE---------------------
 -----------------------------------
 
 library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
+USE IEEE.std_logic_1164.all;
+USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_signed.all;
-use work.NODE_Package.all;
-use work.MAC_Package.all;
-use work.adder_package.all;
-use work.LUT_package.all;
+USE work.NODE_Package.all;
+USE work.MAC_Package.all;
+USE work.adder_package.all;
+USE work.LUT_package.all;
 
 
-entity NODE is
+ENTITY NODE IS
     PORT (x: IN INPUTARRAY;
           weightIn: IN SIGNED(M-1 DOWNTO 0);
           weightOut: OUT SIGNED(M-1 DOWNTO 0);
           clk, rst: IN STD_LOGIC;
           y: OUT SIGNED(M-1 DOWNTO 0));
-end NODE;
+END NODE;
 
-architecture NN of NODE is
+ARCHITECTURE NN of NODE IS
 
-    type matrixWeight is array (0 to N-1) of SIGNED(M-1 DOWNTO 0); 
-    signal weightsIN : matrixWeight;   -- Holds the weight inputs for each MAC
-    signal weightsOut : matrixWeight;     -- Holds the weight outputs for each MAC
+    TYPE matrixWeight is array (0 to N-1) of SIGNED(M-1 DOWNTO 0); 
+    SIGNAL weightsIN : matrixWeight;   -- Holds the weight inputs for each MAC
+    SIGNAL weightsOut : matrixWeight;     -- Holds the weight outputs for each MAC
     
-    type matrix is array (0 to N-1) of SIGNED(M+M-1 DOWNTO 0); 
-    signal sum : matrix;        -- Holds the sum outputs for each MAC
-    signal acc : matrix;        -- Holds the acc input for each MAC
+    TYPE matrix is array (0 to N-1) of SIGNED(M+M-1 DOWNTO 0); 
+    SIGNAL sum : matrix;        -- Holds the sum outputs for each MAC
+    SIGNAL acc : matrix;        -- Holds the acc input for each MAC
     
     SIGNAL node_out : SIGNED(M-1 DOWNTO 0);
     SIGNAL mac_to_lut : SIGNED(M+M-1 DOWNTO 0);
 
-begin
+BEGIN
     
     -- Generates each MAC in the Node
     mac_loop : for i in 0 to K-1 generate
@@ -62,7 +61,7 @@ begin
                                 rst => rst,
                                 weightOUT => weightsOUT(i),
                                 sum => sum(i));
-    end generate;
+    END generate;
 
         MU : LUT port map( x => mac_to_lut,
                            y => node_out);
@@ -77,6 +76,6 @@ begin
     q_loop : for i in 1 to N-1 generate
         weightsIN(i) <= weightsOUT(i-1);
         acc(i) <= sum(i-1);
-    end generate;
+    END generate;
     
-end NN;
+END NN;
